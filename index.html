@@ -26,6 +26,7 @@
         }
         h1 {
             margin-bottom: 20px;
+            color: #fff !important;
         }
         input {
             padding: 10px;
@@ -52,12 +53,30 @@
             margin-top: 20px;
             font-size: 18px;
         }
+
+        #adicionar_campo{
+            width: 40px;
+        }
+
+        .inputNomes{
+            margin: 10px;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>Simulador de Sorteio</h1>
-        <input id="inputNomes" type="text" placeholder="Digite nomes separados por vírgula" />
+        <div class="row">
+            <div class="col-sm-12">
+                <input id="inputNomes" class="inputNomes" type="text" placeholder="Digite um nome"/>
+                <input type="button" class="btn btn-success" id="adicionar_campo" value="+" placeholder="Adicionar Campo" onclick="adicionarCampo()">
+                <div class="outros_nomes_div">
+
+                </div>
+            </div>
+        </div>
         <br>
         <button id="btnSortear">Sortear</button>
         <p id="resultado"></p>

@@ -36,41 +36,49 @@ async function fetchSimulado(url) {
   });
 }
 
-// document.getElementById('btnSortear').addEventListener('click', () => {
-//   const inputNomes = document.getElementById('inputNomes').value;
-//   const resultado = document.getElementById('resultado');
+function adicionarCampo() {
+    const container = document.querySelector('.outros_nomes_div');
+    const novoInput = document.createElement('input');
+    const quebraLinha = document.createElement('br');
+    
+    novoInput.type = 'text';
+    novoInput.placeholder = 'Digite um nome';
+    novoInput.className = 'inputNomes';
+    
+    container.appendChild(novoInput);
+    container.appendChild(quebraLinha);
+}
 
-//   try {
-//       const response = fetchSimulado(`/sorteio?nomes=${inputNomes}`);
-//       if (response.ok) {
-//           const data = response.json();
-//           resultado.textContent = `Vencedor: ${data.vencedor}`;
-//       } else {
-//           const error = response.json();
-//           resultado.textContent = `Erro: ${error.error}`;
-//       }
-//   } catch (e) {
-//       resultado.textContent = 'Erro ao realizar o sorteio.';
-//   }
-// });
+document.addEventListener('DOMContentLoaded', () => {
+    const btnSortear = document.getElementById('btnSortear');
+    const resultado = document.getElementById('resultado');
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const inputNomes = document.getElementById('inputNomes');
-        const btnSortear = document.getElementById('btnSortear');
-        const resultado = document.getElementById('resultado');
-
-        btnSortear.addEventListener('click', async () => {
-            try {
-                const response = await fetchSimulado(`/sorteio?nomes=${inputNomes.value}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    resultado.textContent = `Vencedor: ${data.vencedor}`;
-                } else {
-                    const error = await response.json();
-                    resultado.textContent = `Erro: ${error.error}`;
-                }
-            } catch (e) {
-                resultado.textContent = 'Erro ao realizar o sorteio.';
+    btnSortear.addEventListener('click', async () => {
+        try {
+            // Seleciona todos os inputs com a classe 'inputNomes'
+            const inputs = document.getElementsByClassName('inputNomes');
+            
+            // Coleta os valores dos inputs em um array
+            const nomes = Array.from(inputs)
+                .map(input => input.value.trim()) // Remove espaços extras
+                .filter(nome => nome); // Remove inputs vazios
+            
+            if (nomes.length === 0) {
+                resultado.textContent = 'Erro: Por favor, preencha pelo menos um nome.';
+                return;
             }
-        });
+            
+            // Envia os nomes para o simulador
+            const response = await fetchSimulado(`/sorteio?nomes=${nomes.join(',')}`);
+            if (response.ok) {
+                const data = await response.json();
+                resultado.textContent = `Vencedor: ${data.vencedor}`;
+            } else {
+                const error = await response.json();
+                resultado.textContent = `Erro: ${error.error}`;
+            }
+        } catch (e) {
+            resultado.textContent = 'Erro ao realizar o sorteio.';
+        }
     });
+});
